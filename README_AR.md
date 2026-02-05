@@ -1,0 +1,1 @@
+# تشغيل سريع\ncopy .env.example .env\nnpm i\nnpm run db:push\nnpm run seed\nnpm run dev\n

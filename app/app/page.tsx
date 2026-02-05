@@ -1,0 +1,2 @@
+import Nav from '@/components/nav';import { Shell, Card, Btn } from '@/components/ui';
+export default async function AppHome(){return(<Shell><Nav/><Card title='جاهز ✅'><div className='text-sm text-slate-600'>النسخة Enterprise جاهزة وفيها CRM/Projects/Devices/KB/Uploads/Manuals/Audit.</div><div className='mt-4 flex gap-2 flex-wrap'><Btn href='/app/crm'>CRM</Btn><Btn href='/app/projects'>Projects</Btn><Btn href='/app/devices'>Devices</Btn><Btn href='/app/kb'>KB</Btn><Btn href='/app/audit'>Audit</Btn></div></Card></Shell>)}

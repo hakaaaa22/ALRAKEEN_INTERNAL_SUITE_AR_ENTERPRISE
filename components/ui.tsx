@@ -1,0 +1,5 @@
+import Link from 'next/link';
+export function Shell({children}:{children:React.ReactNode}){return <div className='min-h-screen bg-white'><div className='mx-auto max-w-6xl px-4 py-6'>{children}</div></div>}
+export function Card({title,children,actions}:{title:string,children:React.ReactNode,actions?:React.ReactNode}){return(<div className='rounded-2xl border border-slate-200 bg-white shadow-sm'><div className='flex items-center justify-between px-5 py-4 border-b border-slate-100'><h2 className='text-lg font-semibold'>{title}</h2>{actions}</div><div className='p-5'>{children}</div></div>)}
+export function Btn({href,children,type='button',onClick}:any){const cls='inline-flex items-center justify-center rounded-xl bg-slate-900 px-4 py-2 text-white hover:bg-slate-800 text-sm';if(href) return <Link className={cls} href={href}>{children}</Link>;return <button type={type} onClick={onClick} className={cls}>{children}</button>}
+export function Input(props:any){return <input {...props} className={'w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300 '+(props.className||'')} />}

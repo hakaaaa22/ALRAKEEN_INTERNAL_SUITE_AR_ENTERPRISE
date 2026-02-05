@@ -1,0 +1,22 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "sqlite"; url = env("DATABASE_URL") }
+
+enum Role { ADMIN MANAGER SALES TECH VIEWER }
+
+model User { id String @id @default(cuid()) name String email String @unique password String role Role @default(VIEWER) createdAt DateTime @default(now()) updatedAt DateTime @updatedAt auditLogs AuditLog[] }
+model AuditLog { id String @id @default(cuid()) actorId String? actor User? @relation(fields: [actorId], references: [id]) action String entity String entityId String? meta String? ip String? createdAt DateTime @default(now()) @@index([entity, entityId]) @@index([createdAt]) }
+
+model Company { id String @id @default(cuid()) name String vat String? phone String? email String? address String? notes String? createdAt DateTime @default(now()) updatedAt DateTime @updatedAt contacts Contact[] deals Deal[] }
+model Contact { id String @id @default(cuid()) companyId String company Company @relation(fields: [companyId], references: [id]) name String title String? phone String? email String? notes String? createdAt DateTime @default(now()) updatedAt DateTime @updatedAt }
+enum DealStage { LEAD QUALIFIED PROPOSAL NEGOTIATION WON LOST }
+model Deal { id String @id @default(cuid()) companyId String? company Company? @relation(fields: [companyId], references: [id]) title String stage DealStage @default(LEAD) amountSAR Float @default(0) closeDate DateTime? owner String? notes String? createdAt DateTime @default(now()) updatedAt DateTime @updatedAt }
+
+enum ProjectStatus { PLANNED ACTIVE ON_HOLD DONE }
+model Project { id String @id @default(cuid()) name String customer String? status ProjectStatus @default(PLANNED) startDate DateTime? endDate DateTime? description String? createdAt DateTime @default(now()) updatedAt DateTime @updatedAt tasks Task[] installs Installation[] articles KnowledgeArticle[] files FileAsset[] }
+enum TaskStatus { TODO IN_PROGRESS BLOCKED DONE }
+model Task { id String @id @default(cuid()) projectId String project Project @relation(fields: [projectId], references: [id]) title String assignee String? status TaskStatus @default(TODO) priority Int @default(3) startDate DateTime? dueDate DateTime? notes String? createdAt DateTime @default(now()) updatedAt DateTime @updatedAt }
+
+model DeviceInstalled { id String @id @default(cuid()) serial String @unique vendor String @default("Teltonika") model String plate String? simNumber String? imei String? createdAt DateTime @default(now()) updatedAt DateTime @updatedAt installs Installation[] }
+model Installation { id String @id @default(cuid()) projectId String project Project @relation(fields: [projectId], references: [id]) deviceId String device DeviceInstalled @relation(fields: [deviceId], references: [id]) installedBy String? installedAt DateTime @default(now()) location String? notes String? }
+model KnowledgeArticle { id String @id @default(cuid()) projectId String? project Project? @relation(fields: [projectId], references: [id]) title String body String tags String? createdAt DateTime @default(now()) updatedAt DateTime @updatedAt }
+model FileAsset { id String @id @default(cuid()) projectId String? project Project? @relation(fields: [projectId], references: [id]) name String kind String path String mime String? size Int? createdAt DateTime @default(now()) }
